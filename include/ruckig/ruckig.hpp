@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
-#include <format>
+#include <fmt/format.h>
 #include <iostream>
 #include <limits>
 #include <math.h>
@@ -51,21 +51,21 @@ public:
     }
 
     template<size_t D = DOFs, typename std::enable_if<(D >= 1), int>::type = 0>
-    explicit Ruckig(double delta_time):
+    explicit Ruckig(double dt):
         max_number_of_waypoints(0),
         degrees_of_freedom(DOFs),
-        delta_time(delta_time)
+        delta_time(dt)
     {
     }
 
 #if defined WITH_CLOUD_CLIENT
     template<size_t D = DOFs, typename std::enable_if<(D >= 1), int>::type = 0>
-    explicit Ruckig(double delta_time, size_t max_number_of_waypoints):
-        current_input(InputParameter<DOFs, CustomVector>(max_number_of_waypoints)),
-        calculator(Calculator<DOFs, CustomVector>(max_number_of_waypoints)),
-        max_number_of_waypoints(max_number_of_waypoints),
+    explicit Ruckig(double dt, size_t max_waypoints):
+        current_input(InputParameter<DOFs, CustomVector>(max_waypoints)),
+        calculator(Calculator<DOFs, CustomVector>(max_waypoints)),
+        max_number_of_waypoints(max_waypoints),
         degrees_of_freedom(DOFs),
-        delta_time(delta_time)
+        delta_time(dt)
     {
     }
 #endif
@@ -81,23 +81,23 @@ public:
     }
 
     template<size_t D = DOFs, typename std::enable_if<(D == 0), int>::type = 0>
-    explicit Ruckig(size_t dofs, double delta_time):
+    explicit Ruckig(size_t dofs, double dt):
         current_input(InputParameter<DOFs, CustomVector>(dofs)),
         calculator(Calculator<DOFs, CustomVector>(dofs)),
         max_number_of_waypoints(0),
         degrees_of_freedom(dofs),
-        delta_time(delta_time)
+        delta_time(dt)
     {
     }
 
 #if defined WITH_CLOUD_CLIENT
     template<size_t D = DOFs, typename std::enable_if<(D == 0), int>::type = 0>
-    explicit Ruckig(size_t dofs, double delta_time, size_t max_number_of_waypoints):
-        current_input(InputParameter<DOFs, CustomVector>(dofs, max_number_of_waypoints)),
-        calculator(Calculator<DOFs, CustomVector>(dofs, max_number_of_waypoints)),
-        max_number_of_waypoints(max_number_of_waypoints),
+    explicit Ruckig(size_t dofs, double dt, size_t max_waypoints):
+        current_input(InputParameter<DOFs, CustomVector>(dofs, max_waypoints)),
+        calculator(Calculator<DOFs, CustomVector>(dofs, max_waypoints)),
+        max_number_of_waypoints(max_waypoints),
         degrees_of_freedom(dofs),
-        delta_time(delta_time)
+        delta_time(dt)
     {
     }
 #endif
@@ -180,7 +180,7 @@ public:
         if (!input.intermediate_positions.empty() && input.control_interface == ControlInterface::Position) {
             if (input.intermediate_positions.size() > max_number_of_waypoints) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError(std::format("The number of intermediate positions {} exceeds the maximum number of waypoints {}.", input.intermediate_positions.size(), max_number_of_waypoints));
+                    throw RuckigError(fmt::format("The number of intermediate positions {} exceeds the maximum number of waypoints {}.", input.intermediate_positions.size(), max_number_of_waypoints));
                 }
                 return false;
             }
@@ -188,7 +188,7 @@ public:
 
         if (delta_time <= 0.0 && input.duration_discretization != DurationDiscretization::Continuous) {
             if constexpr (throw_validation_error) {
-                throw RuckigError(std::format("delta time (control rate) parameter {} should be larger than zero.", delta_time));
+                throw RuckigError(fmt::format("delta time (control rate) parameter {} should be larger than zero.", delta_time));
             }
             return false;
         }
@@ -242,7 +242,7 @@ public:
         output.did_section_change = (output.new_section > old_section);  // Report only forward section changes
 
         const auto stop = std::chrono::steady_clock::now();
-        output.calculation_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count() / 1000.0;
+        output.calculation_duration = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count()) / 1000.0;
 
         output.pass_to_input(current_input);
 

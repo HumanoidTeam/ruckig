@@ -7,10 +7,10 @@ project(ruckig VERSION 0.15.5 LANGUAGES CXX)
 include(GNUInstallDirs)
 
 
-option(BUILD_EXAMPLES "Build example programs" ON)
+option(BUILD_EXAMPLES "Build example programs" OFF)
 option(BUILD_PYTHON_MODULE "Build Python wrapper with nanobind" OFF)
-option(BUILD_CLOUD_CLIENT "Build cloud client to calculate Ruckig Pro trajectories remotely" ON)
-option(BUILD_TESTS "Build tests" ON)
+option(BUILD_CLOUD_CLIENT "Build cloud client to calculate Ruckig Pro trajectories remotely" OFF)
+option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_BENCHMARK "Build benchmark" OFF)
 option(BUILD_SHARED_LIBS "Build as shared library" ON)
 
@@ -33,12 +33,24 @@ add_library(ruckig
   src/ruckig/velocity_third_step2.cpp
 )
 
-target_compile_features(ruckig PUBLIC cxx_std_20)
+target_compile_features(ruckig PUBLIC cxx_std_17)
+
+# Disable strict warnings that cause issues with this Ruckig version
+target_compile_options(ruckig PRIVATE
+  -Wno-shadow
+  -Wno-missing-braces
+  -Wno-unused-parameter
+  -Wno-conversion
+)
+
 target_include_directories(ruckig PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
-target_link_libraries(ruckig PUBLIC)
+
+# Add fmt dependency for format support
+find_package(fmt REQUIRED)
+target_link_libraries(ruckig PUBLIC fmt::fmt)
 
 if(MSVC)
   target_compile_definitions(ruckig PUBLIC _USE_MATH_DEFINES)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include <format>
+#include <fmt/format.h>
 #include <iomanip>
 #include <limits>
 #include <optional>
@@ -157,7 +157,7 @@ public:
             const double jMax = max_jerk[dof];
             if (std::isnan(jMax) || jMax < 0.0) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError(std::format("maximum jerk limit {} of DoF {} should be larger than or equal to zero.", jMax, dof));
+                    throw RuckigError(fmt::format("maximum jerk limit {} of DoF {} should be larger than or equal to zero.", jMax, dof));
                 }
                 return false;
             }
@@ -165,7 +165,7 @@ public:
             const double aMax = max_acceleration[dof];
             if (std::isnan(aMax) || aMax < 0.0) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError(std::format("maximum acceleration limit {} of DoF {} should be larger than or equal to zero.", aMax, dof));
+                    throw RuckigError(fmt::format("maximum acceleration limit {} of DoF {} should be larger than or equal to zero.", aMax, dof));
                 }
                 return false;
             }
@@ -173,7 +173,7 @@ public:
             const double aMin = min_acceleration ? min_acceleration.value()[dof] : -max_acceleration[dof];
             if (std::isnan(aMin) || aMin > 0.0) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError(std::format("minimum acceleration limit {} of DoF {} should be smaller than or equal to zero.", aMin, dof));
+                    throw RuckigError(fmt::format("minimum acceleration limit {} of DoF {} should be smaller than or equal to zero.", aMin, dof));
                 }
                 return false;
             }
@@ -181,14 +181,14 @@ public:
             const double a0 = current_acceleration[dof];
             if (std::isnan(a0)) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError(std::format("current acceleration {} of DoF {} should be a valid number.", a0, dof));
+                    throw RuckigError(fmt::format("current acceleration {} of DoF {} should be a valid number.", a0, dof));
                 }
                 return false;
             }
             const double af = target_acceleration[dof];
             if (std::isnan(af)) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError(std::format("target acceleration {} of DoF {} should be a valid number.", af, dof));
+                    throw RuckigError(fmt::format("target acceleration {} of DoF {} should be a valid number.", af, dof));
                 }
                 return false;
             }
@@ -196,13 +196,13 @@ public:
             if (check_current_state_within_limits) {
                 if (a0 > aMax) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("current acceleration {} of DoF {} exceeds its maximum acceleration limit {}.", a0, dof, aMax));
+                        throw RuckigError(fmt::format("current acceleration {} of DoF {} exceeds its maximum acceleration limit {}.", a0, dof, aMax));
                     }
                     return false;
                 }
                 if (a0 < aMin) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("current acceleration {} of DoF {} undercuts its minimum acceleration limit {}.", a0, dof, aMin));
+                        throw RuckigError(fmt::format("current acceleration {} of DoF {} undercuts its minimum acceleration limit {}.", a0, dof, aMin));
                     }
                     return false;
                 }
@@ -210,13 +210,13 @@ public:
             if (check_target_state_within_limits) {
                 if (af > aMax) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("target acceleration {} of DoF {} exceeds its maximum acceleration limit {}.", af, dof, aMax));
+                        throw RuckigError(fmt::format("target acceleration {} of DoF {} exceeds its maximum acceleration limit {}.", af, dof, aMax));
                     }
                     return false;
                 }
                 if (af < aMin) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("target acceleration {} of DoF {} undercuts its minimum acceleration limit {}.", af, dof, aMin));
+                        throw RuckigError(fmt::format("target acceleration {} of DoF {} undercuts its minimum acceleration limit {}.", af, dof, aMin));
                     }
                     return false;
                 }
@@ -225,14 +225,14 @@ public:
             const double v0 = current_velocity[dof];
             if (std::isnan(v0)) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError(std::format("current velocity {} of DoF {} should be a valid number.", v0, dof));
+                    throw RuckigError(fmt::format("current velocity {} of DoF {} should be a valid number.", v0, dof));
                 }
                 return false;
             }
             const double vf = target_velocity[dof];
             if (std::isnan(vf)) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError(std::format("target velocity {} of DoF {} should be a valid number.", vf, dof));
+                    throw RuckigError(fmt::format("target velocity {} of DoF {} should be a valid number.", vf, dof));
                 }
                 return false;
             }
@@ -242,14 +242,14 @@ public:
                 const double p0 = current_position[dof];
                 if (std::isnan(p0)) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("current position {} of DoF {} should be a valid number.", p0, dof));
+                        throw RuckigError(fmt::format("current position {} of DoF {} should be a valid number.", p0, dof));
                     }
                     return false;
                 }
                 const double pf = target_position[dof];
                 if (std::isnan(pf)) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("target position {} of DoF {} should be a valid number.", pf, dof));
+                        throw RuckigError(fmt::format("target position {} of DoF {} should be a valid number.", pf, dof));
                     }
                     return false;
                 }
@@ -257,7 +257,7 @@ public:
                 const double vMax = max_velocity[dof];
                 if (std::isnan(vMax) || vMax < 0.0) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("maximum velocity limit {} of DoF {} should be larger than or equal to zero.", vMax, dof));
+                        throw RuckigError(fmt::format("maximum velocity limit {} of DoF {} should be larger than or equal to zero.", vMax, dof));
                     }
                     return false;
                 }
@@ -265,7 +265,7 @@ public:
                 const double vMin = min_velocity ? min_velocity.value()[dof] : -max_velocity[dof];
                 if (std::isnan(vMin) || vMin > 0.0) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("minimum velocity limit {} of DoF {} should be smaller than or equal to zero.", vMin, dof));
+                        throw RuckigError(fmt::format("minimum velocity limit {} of DoF {} should be smaller than or equal to zero.", vMin, dof));
                     }
                     return false;
                 }
@@ -273,13 +273,13 @@ public:
                 if (check_current_state_within_limits) {
                     if (v0 > vMax) {
                         if constexpr (throw_validation_error) {
-                            throw RuckigError(std::format("current velocity {} of DoF {} exceeds its maximum velocity limit {}.", v0, dof, vMax));
+                            throw RuckigError(fmt::format("current velocity {} of DoF {} exceeds its maximum velocity limit {}.", v0, dof, vMax));
                         }
                         return false;
                     }
                     if (v0 < vMin) {
                         if constexpr (throw_validation_error) {
-                            throw RuckigError(std::format("current velocity {} of DoF {} undercuts its minimum velocity limit {}.", v0, dof, vMin));
+                            throw RuckigError(fmt::format("current velocity {} of DoF {} undercuts its minimum velocity limit {}.", v0, dof, vMin));
                         }
                         return false;
                     }
@@ -287,13 +287,13 @@ public:
                 if (check_target_state_within_limits) {
                     if (vf > vMax) {
                         if constexpr (throw_validation_error) {
-                            throw RuckigError(std::format("target velocity {} of DoF {} exceeds its maximum velocity limit {}.", vf, dof, vMax));
+                            throw RuckigError(fmt::format("target velocity {} of DoF {} exceeds its maximum velocity limit {}.", vf, dof, vMax));
                         }
                         return false;
                     }
                     if (vf < vMin) {
                         if constexpr (throw_validation_error) {
-                            throw RuckigError(std::format("target velocity {} of DoF {} undercuts its minimum velocity limit {}.", vf, dof, vMin));
+                            throw RuckigError(fmt::format("target velocity {} of DoF {} undercuts its minimum velocity limit {}.", vf, dof, vMin));
                         }
                         return false;
                     }
@@ -302,13 +302,13 @@ public:
                 if (check_current_state_within_limits) {
                     if (a0 > 0 && jMax > 0 && v_at_a_zero(v0, a0, jMax) > vMax) {
                         if constexpr (throw_validation_error) {
-                            throw RuckigError(std::format("DoF {} will inevitably reach a velocity {} from the current kinematic state that will exceed its maximum velocity limit {}.", dof, v_at_a_zero(v0, a0, jMax), vMax));
+                            throw RuckigError(fmt::format("DoF {} will inevitably reach a velocity {} from the current kinematic state that will exceed its maximum velocity limit {}.", dof, v_at_a_zero(v0, a0, jMax), vMax));
                         }
                         return false;
                     }
                     if (a0 < 0 && jMax > 0 && v_at_a_zero(v0, a0, -jMax) < vMin) {
                         if constexpr (throw_validation_error) {
-                            throw RuckigError(std::format("DoF {} will inevitably reach a velocity {} from the current kinematic state that will undercut its minimum velocity limit {}.", dof, v_at_a_zero(v0, a0, -jMax), vMin));
+                            throw RuckigError(fmt::format("DoF {} will inevitably reach a velocity {} from the current kinematic state that will undercut its minimum velocity limit {}.", dof, v_at_a_zero(v0, a0, -jMax), vMin));
                         }
                         return false;
                     }
@@ -316,13 +316,13 @@ public:
                 if (check_target_state_within_limits) {
                     if (af < 0 && jMax > 0 && v_at_a_zero(vf, af, jMax) > vMax) {
                         if constexpr (throw_validation_error) {
-                            throw RuckigError(std::format("DoF {} will inevitably have reached a velocity {} from the target kinematic state that will exceed its maximum velocity limit {}.", dof, v_at_a_zero(vf, af, jMax), vMax));
+                            throw RuckigError(fmt::format("DoF {} will inevitably have reached a velocity {} from the target kinematic state that will exceed its maximum velocity limit {}.", dof, v_at_a_zero(vf, af, jMax), vMax));
                         }
                         return false;
                     }
                     if (af > 0 && jMax > 0 && v_at_a_zero(vf, af, -jMax) < vMin) {
                         if constexpr (throw_validation_error) {
-                            throw RuckigError(std::format("DoF {} will inevitably have reached a velocity {} from the target kinematic state that will undercut its minimum velocity limit {}.", dof, v_at_a_zero(vf, af, -jMax), vMin));
+                            throw RuckigError(fmt::format("DoF {} will inevitably have reached a velocity {} from the target kinematic state that will undercut its minimum velocity limit {}.", dof, v_at_a_zero(vf, af, -jMax), vMin));
                         }
                         return false;
                     }
@@ -349,7 +349,7 @@ public:
                 const double jMax = max_jerk[dof];
                 if (std::isinf(jMax)) {
                     if constexpr (throw_validation_error) {
-                        throw RuckigError(std::format("infinite jerk limit of DoF {} is currently not supported with intermediate positions.", dof));
+                        throw RuckigError(fmt::format("infinite jerk limit of DoF {} is currently not supported with intermediate positions.", dof));
                     }
                     return false;
                 }

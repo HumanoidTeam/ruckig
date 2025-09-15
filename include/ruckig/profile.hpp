@@ -82,9 +82,9 @@ public:
         }
 
         if constexpr (control_signs == ControlSigns::UDDU) {
-            j = {(t[0] > 0 ? jf : 0), 0, (t[2] > 0 ? -jf : 0), 0, (t[4] > 0 ? -jf : 0), 0, (t[6] > 0 ? jf : 0)};
+            j = {{(t[0] > 0 ? jf : 0), 0, (t[2] > 0 ? -jf : 0), 0, (t[4] > 0 ? -jf : 0), 0, (t[6] > 0 ? jf : 0)}};
         } else {
-            j = {(t[0] > 0 ? jf : 0), 0, (t[2] > 0 ? -jf : 0), 0, (t[4] > 0 ? jf : 0), 0, (t[6] > 0 ? -jf : 0)};
+            j = {{(t[0] > 0 ? jf : 0), 0, (t[2] > 0 ? -jf : 0), 0, (t[4] > 0 ? jf : 0), 0, (t[6] > 0 ? -jf : 0)}};
         }
 
         for (size_t i = 0; i < 7; ++i) {
@@ -135,13 +135,13 @@ public:
             return false;
         }
 
-        t_sum = {0, t[1], t[1], t[1], t[1], t[1], t[1]};
+        t_sum = {{0, t[1], t[1], t[1], t[1], t[1], t[1]}};
         if (t_sum.back() > t_max) { // For numerical reasons, is that needed?
             return false;
         }
 
-        j = {0, 0, 0, 0, 0, 0, 0};
-        a = {0, (t[1] > 0) ? aUp : 0, 0, 0, 0, 0, 0, af};
+        j = {{0, 0, 0, 0, 0, 0, 0}};
+        a = {{0, (t[1] > 0) ? aUp : 0, 0, 0, 0, 0, 0, af}};
         for (size_t i = 0; i < 7; ++i) {
             v[i+1] = v[i] + t[i] * a[i];
             p[i+1] = p[i] + t[i] * (v[i] + t[i] * a[i] / 2);
@@ -208,9 +208,9 @@ public:
         }
 
         if constexpr (control_signs == ControlSigns::UDDU) {
-            j = {(t[0] > 0 ? jf : 0), 0, (t[2] > 0 ? -jf : 0), 0, (t[4] > 0 ? -jf : 0), 0, (t[6] > 0 ? jf : 0)};
+            j = {{(t[0] > 0 ? jf : 0), 0, (t[2] > 0 ? -jf : 0), 0, (t[4] > 0 ? -jf : 0), 0, (t[6] > 0 ? jf : 0)}};
         } else {
-            j = {(t[0] > 0 ? jf : 0), 0, (t[2] > 0 ? -jf : 0), 0, (t[4] > 0 ? jf : 0), 0, (t[6] > 0 ? -jf : 0)};
+            j = {{(t[0] > 0 ? jf : 0), 0, (t[2] > 0 ? -jf : 0), 0, (t[4] > 0 ? jf : 0), 0, (t[6] > 0 ? -jf : 0)}};
         }
 
         direction = (vMax > 0) ? Profile::Direction::UP : Profile::Direction::DOWN;
@@ -321,11 +321,11 @@ public:
             return false;
         }
 
-        j = {0, 0, 0, 0, 0, 0, 0};
+        j = {{0, 0, 0, 0, 0, 0, 0}};
         if constexpr (control_signs == ControlSigns::UDDU) {
-            a = {(t[0] > 0 ? aUp : 0), 0, (t[2] > 0 ? aDown : 0), 0, (t[4] > 0 ? aDown : 0), 0, (t[6] > 0 ? aUp : 0), af};
+            a = {{(t[0] > 0 ? aUp : 0), 0, (t[2] > 0 ? aDown : 0), 0, (t[4] > 0 ? aDown : 0), 0, (t[6] > 0 ? aUp : 0), af}};
         } else {
-            a = {(t[0] > 0 ? aUp : 0), 0, (t[2] > 0 ? aDown : 0), 0, (t[4] > 0 ? aUp : 0), 0, (t[6] > 0 ? aDown : 0), af};
+            a = {{(t[0] > 0 ? aUp : 0), 0, (t[2] > 0 ? aDown : 0), 0, (t[4] > 0 ? aUp : 0), 0, (t[6] > 0 ? aDown : 0), af}};
         }
 
         direction = (vMax > 0) ? Profile::Direction::UP : Profile::Direction::DOWN;
@@ -367,14 +367,14 @@ public:
             return false;
         }
 
-        t_sum = {0, 0, 0, t[3], t[3], t[3], t[3]};
+        t_sum = {{0, 0, 0, t[3], t[3], t[3], t[3]}};
         if (t_sum.back() > t_max) { // For numerical reasons, is that needed?
             return false;
         }
 
-        j = {0, 0, 0, 0, 0, 0, 0};
-        a = {0, 0, 0, 0, 0, 0, 0, af};
-        v = {0, 0, 0, t[3] > 0 ? vUp : 0, 0, 0, 0, vf};
+        j = {{0, 0, 0, 0, 0, 0, 0}};
+        a = {{0, 0, 0, 0, 0, 0, 0, af}};
+        v = {{0, 0, 0, t[3] > 0 ? vUp : 0, 0, 0, 0, vf}};
         for (size_t i = 0; i < 7; ++i) {
             p[i+1] = p[i] + t[i] * (v[i] + t[i] * a[i] / 2);
         }

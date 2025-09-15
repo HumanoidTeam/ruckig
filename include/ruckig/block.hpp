@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include <format>
+#include <fmt/format.h>
 #include <limits>
 #include <numeric>
 #include <optional>
@@ -27,7 +27,7 @@ public:
         double left, right; // [s]
         Profile profile; // Profile corresponding to right (end) time
 
-        explicit Interval(double left, double right): left(left), right(right) { }
+        explicit Interval(double l, double r): left(l), right(r) { }
 
         explicit Interval(const Profile& profile_left, const Profile& profile_right) {
             const double left_duration = profile_left.t_sum.back() + profile_left.brake.duration + profile_left.accel.duration;
@@ -147,12 +147,12 @@ public:
     }
 
     std::string to_string() const {
-        std::string result = std::format("[{} ", t_min);
+        std::string result = fmt::format("[{} ", t_min);
         if (a) {
-            result += std::format("{}] [{} ", a->left, a->right);
+            result += fmt::format("{}] [{} ", a->left, a->right);
         }
         if (b) {
-            result += std::format("{}] [{} ", b->left, b->right);
+            result += fmt::format("{}] [{} ", b->left, b->right);
         }
         return result + "-";
     }

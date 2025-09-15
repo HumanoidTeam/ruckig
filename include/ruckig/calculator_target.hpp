@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <array>
-#include <format>
+#include <fmt/format.h>
 #include <iostream>
 #include <limits>
 #include <optional>
@@ -311,13 +311,13 @@ public:
                 const bool has_zero_limits = (inp.max_acceleration[dof] == 0.0 || inp_min_acceleration[dof] == 0.0 || inp.max_jerk[dof] == 0.0);
                 if (has_zero_limits) {
                     if constexpr (throw_error) {
-                        throw RuckigError(std::format("zero limits conflict in step 1, dof: {} input: {}", dof, inp.to_string()));
+                        throw RuckigError(fmt::format("zero limits conflict in step 1, dof: {} input: {}", dof, inp.to_string()));
                     }
                     return Result::ErrorZeroLimits;
 
                 } else {
                     if constexpr (throw_error) {
-                        throw RuckigError(std::format("error in step 1, dof: {} input: {}", dof, inp.to_string()));
+                        throw RuckigError(fmt::format("error in step 1, dof: {} input: {}", dof, inp.to_string()));
                     }
                     return Result::ErrorExecutionTimeCalculation;
                 }
@@ -348,13 +348,13 @@ public:
 
             if (has_zero_limits) {
                 if constexpr (throw_error) {
-                    throw RuckigError(std::format("zero limits conflict with other degrees of freedom in time synchronization {}", traj.duration));
+                    throw RuckigError(fmt::format("zero limits conflict with other degrees of freedom in time synchronization {}", traj.duration));
                 }
                 return Result::ErrorZeroLimits;
 
             } else {
                 if constexpr (throw_error) {
-                    throw RuckigError(std::format("error in time synchronization: {}", traj.duration));
+                    throw RuckigError(fmt::format("error in time synchronization: {}", traj.duration));
                 }
                 return Result::ErrorSynchronizationCalculation;
             }
@@ -511,7 +511,7 @@ public:
             }
             if (!found_time_synchronization) {
                 if constexpr (throw_error) {
-                    throw RuckigError(std::format("error in step 2 in dof: {} for t sync: {} input: {}", dof, traj.duration, inp.to_string()));
+                    throw RuckigError(fmt::format("error in step 2 in dof: {} for t sync: {} input: {}", dof, traj.duration, inp.to_string()));
                 }
                 return Result::ErrorSynchronizationCalculation;
             }
